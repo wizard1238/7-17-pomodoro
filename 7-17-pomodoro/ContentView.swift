@@ -21,6 +21,7 @@ struct ContentView: View {
     @State var colors: [Color] = [Color](repeating: .red, count: 8)
     
     var body: some View {
+        Spacer()
         VStack {
             HStack {
                 ForEach(0..<8) { i in
@@ -29,7 +30,9 @@ struct ContentView: View {
                         .frame(width: (circleDiameter - 75) / 8, height: 20)
                 }
             }
+            Spacer()
             Text(phase)
+            Spacer()
             ZStack {
                 Circle()
                     .fill(Color.primary)
@@ -56,8 +59,8 @@ struct ContentView: View {
                     colors[section - 1] = .green
                     if countdown > 0 && status == "Stop" {
                         withAnimation(Animation.linear(duration: 0.01)) {
-                            second += 30
-                            countdown -= 30
+                            second += 1
+                            countdown -= 1
                         }
                     }
                     if countdown == 0 {
@@ -70,9 +73,8 @@ struct ContentView: View {
                 }
                 
             })
-            
+            Spacer()
             Text(String(getFormattedTime(i: countdown)))
-            
             Button(status) {
                 if status == "Start" {
                     status = "Stop"
@@ -80,7 +82,22 @@ struct ContentView: View {
                     status = "Start"
                 }
             }
+            
+            Button("Reset") {
+                reset()
+                
+                section = 1
+                phase = getPhase(section: section)
+                countdown = getTimeSegment(section: section).rawValue
+                second = 0
+                status = "Start"
+            }
+            Spacer()
         }
+    }
+    
+    func reset() {
+        colors = [Color](repeating: .red, count: 8)
     }
     
     func getFormattedTime(i: Int) -> String {
@@ -112,9 +129,9 @@ struct ContentView: View {
 }
 
 enum Sections: Int {
-    case work = 180
-    case short_break = 60
-    case long_break = 120
+    case work = 1500
+    case short_break = 300
+    case long_break = 900
 }
 
 struct ContentView_Previews: PreviewProvider {
