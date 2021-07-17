@@ -18,11 +18,14 @@ struct ContentView: View {
     
     @State var countdown: Int = 0
     @State var phase: String =  ""
+    @State var colors: [Color] = [Color](repeating: .red, count: 8)
+    
     var body: some View {
         VStack {
             HStack {
                 ForEach(0..<8) { i in
                     Rectangle()
+                        .fill(colors[i])
                         .frame(width: (circleDiameter - 75) / 8, height: 20)
                 }
             }
@@ -50,6 +53,7 @@ struct ContentView: View {
             }
             .onReceive(receiver, perform: { _ in
                 if status != "Start" {
+                    colors[section - 1] = .green
                     if countdown > 0 && status == "Stop" {
                         withAnimation(Animation.linear(duration: 0.01)) {
                             second += 30
